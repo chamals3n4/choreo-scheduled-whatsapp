@@ -5,9 +5,10 @@ import dotenv from "dotenv";
 dotenv.config();
 
 //twilio config
-const accountSid = process.env.TWILIO_ACCOUNT_SID;
-const authToken = process.env.TWILIO_AUTH_TOKEN;
-const client = twilio(accountSid, authToken);
+const ACCSID = process.env.TWILIO_ACC_SID;
+const AUTHTOKEN = process.env.TWILIO_AUTH_TOKEN;
+const client = twilio(ACCSID, AUTHTOKEN);
+const whatsappNum = process.env.TWILIO_WHATSAPP_NUM;
 
 //supabase config
 const SUPABASE_URL = process.env.SUPABASE_URL;
@@ -36,7 +37,7 @@ async function createMessage(bodyTemperature, heartRate) {
 
   const message = await client.messages.create({
     body: messageBody,
-    from: `whatsapp:${process.env.TWILIO_WHATSAPP_NUM}`,
+    from: `whatsapp:${whatsappNum}`,
     to: "whatsapp:+94717110160",
   });
 
