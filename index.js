@@ -18,8 +18,8 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 // function to fetch data from supabase
 async function fetchLatestHealthData() {
   const { data, error } = await supabase
-    .from("healthData")
-    .select("body_temperature, heart_rate")
+    .from("bpm_readings")
+    .select("bpm")
     .limit(1);
 
   if (error) {
@@ -30,9 +30,8 @@ async function fetchLatestHealthData() {
   return data.length > 0 ? data[0] : null;
 }
 
-async function createMessage(bodyTemperature, heartRate) {
+async function createMessage(heartRate) {
   const messageBody = `📊 Health Update:
-- Body Temperature: ${bodyTemperature}°C
 - Heart Rate: ${heartRate} BPM`;
 
   const message = await client.messages.create({
@@ -49,8 +48,8 @@ async function sendHealthDataMessage() {
   const healthData = await fetchLatestHealthData();
 
   if (healthData) {
-    const { body_temperature, heart_rate, user_phone } = healthData;
-    await createMessage(body_temperature, heart_rate);
+    const {  heart_rate, user_phone } = healthData;
+    await createMessage(heart_rate);
   } else {
     console.log("No health data available.");
   }
